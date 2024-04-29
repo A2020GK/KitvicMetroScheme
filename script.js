@@ -37,7 +37,7 @@ ctx.strokeStyle = "black";
 ctx.stroke();
 
 ctx.lineWidth = 10;
-ctx.strokeStyle =ctx.fillStyle= thread;
+ctx.strokeStyle = ctx.fillStyle = thread;
 
 ctx.beginPath();
 ctx.moveTo(canvas.width - 50, 10);
@@ -49,18 +49,31 @@ ctx.moveTo(50, 10);
 ctx.lineTo(50, canvas.height - 10);
 ctx.stroke();
 
-ctx.lineWidth=1;
+ctx.lineWidth=5;
+
 ctx.beginPath();
-ctx.moveTo(canvas.width-50,0);
-ctx.lineTo(canvas.width-70,20);
-ctx.lineTo(canvas.width-30,20);
+ctx.moveTo(canvas.width - 65, canvas.height-10);
+ctx.lineTo(canvas.width - 35, canvas.height-10);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(65,10);
+ctx.lineTo(35,10);
+ctx.stroke();
+
+ctx.lineWidth = 1;
+
+ctx.beginPath();
+ctx.moveTo(canvas.width - 50, 0);
+ctx.lineTo(canvas.width - 70, 20);
+ctx.lineTo(canvas.width - 30, 20);
 ctx.closePath();
 ctx.fill();
 
 ctx.beginPath();
-ctx.moveTo(50,0);
-ctx.lineTo(70,20);
-ctx.lineTo(30,20);
+ctx.moveTo(50, canvas.height);
+ctx.lineTo(70, canvas.height - 20);
+ctx.lineTo(30, canvas.height - 20);
 ctx.closePath();
 ctx.fill();
 
@@ -69,36 +82,34 @@ ctx.textBaseline = "middle";
 ctx.fillStyle = "white"
 ctx.textAlign = "right";
 
-
-ctx.lineWidth=10;
-let currentThread=threads[thread];
-if(direction==1) currentThread=currentThread.reverse();
-ctx.lineWidth=5;
+let currentThread = threads[thread];
+if (direction == 1) currentThread = currentThread.reverse();
+ctx.lineWidth = 5;
 for (let i = 0; i < currentThread.length; i++) {
-    if(currentThread[i]==station) ctx.fillStyle=ctx.strokeStyle="cyan";
+    if (currentThread[i] == station) ctx.fillStyle = ctx.strokeStyle = "cyan";
     else {
-        ctx.fillStyle="white";
-        ctx.strokeStyle=thread;
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = thread;
     }
     let y = (canvas.height - 20) / currentThread.length * i;
-    ctx.fillText(stations[currentThread[i]],canvas.width-70,y+40);
+    ctx.fillText(stations[currentThread[i]], canvas.width - 70, y + 40);
     ctx.beginPath();
-    ctx.moveTo(canvas.width-65,y+40);
-    ctx.lineTo(canvas.width-35,y+40);
+    ctx.moveTo(canvas.width - 65, y + 40);
+    ctx.lineTo(canvas.width - 35, y + 40);
     ctx.stroke();
 }
-currentThread=currentThread.reverse();
-ctx.textAlign="left";
+currentThread = currentThread.reverse();
+ctx.textAlign = "left";
 for (let i = 0; i < currentThread.length; i++) {
-    if(currentThread[i]==station) ctx.fillStyle=ctx.strokeStyle="cyan";
+    if (currentThread[i] == station) ctx.fillStyle = ctx.strokeStyle = "cyan";
     else {
-        ctx.fillStyle="white";
-        ctx.strokeStyle=thread;
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = thread;
     }
     let y = (canvas.height - 20) / currentThread.length * i;
-    ctx.fillText(stations[currentThread[i]],70,y+40);
+    ctx.fillText(stations[currentThread[i]], 70, y + 40);
     ctx.beginPath();
-    ctx.moveTo(65,y+40);
-    ctx.lineTo(35,y+40);
+    ctx.moveTo(65, y + 40);
+    ctx.lineTo(35, y + 40);
     ctx.stroke();
 }
