@@ -14,9 +14,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-.container {
-    width: 608px;
-    height: 352px;
-    text-align: center;
-    border: 1px solid white;
+canvas {
+    background-color: white;
 }
