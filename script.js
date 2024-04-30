@@ -1,12 +1,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-function updateSize() {
-    canvas.width=innerWidth;
-    canvas.height=innerHeight;
-}
-addEventListener("resize",updateSize)
-updateSize();
 
 const urlParams = new URLSearchParams(location.search);
 
@@ -84,7 +78,7 @@ ctx.lineTo(30, canvas.height - 20);
 ctx.closePath();
 ctx.fill();
 
-ctx.font = canvas.height/17.6+"px Arial monospace";
+ctx.font = "20px Arial monospace"
 ctx.textBaseline = "middle";
 ctx.fillStyle = "white"
 ctx.textAlign = "right";

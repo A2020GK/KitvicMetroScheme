@@ -6,3 +6,7 @@ body {
     background-color: white;
     background-color: gray;
 }
+canvas {
+    width: 100%;
+    height: auto;
+}
