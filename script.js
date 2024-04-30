@@ -98,7 +98,6 @@ for (let i = 0; i < currentThread.length; i++) {
     ctx.lineTo(canvas.width - 35, y + 40);
     ctx.stroke();
 }
-currentThread = currentThread.reverse();
 ctx.textAlign = "left";
 for (let i = 0; i < currentThread.length; i++) {
     if (currentThread[i] == station) ctx.fillStyle = ctx.strokeStyle = "cyan";
