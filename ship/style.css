@@ -1,0 +1,32 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #281C24;
+    color: white;
+    font-size: xx-large;
+}
+.message-box {
+    width: 480px;
+    height: 608px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+p {
+    margin:0;
+}
+
+h1 {
+    background-color: #F9CDCA;
+    padding: 20px;
+    border-radius: 30px;
+    color: #281C24;
+}
