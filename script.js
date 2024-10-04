@@ -1,13 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-
 const urlParams = new URLSearchParams(location.search);
-
-ctx.font = "60px Arial monospace";
-ctx.fillStyle = "red";
-ctx.textBaseline = "middle";
-ctx.textAlign = "center";
 
 const stations = {
     station: "Вокзал",
@@ -30,86 +24,116 @@ const station = urlParams.get("station");
 const direction = urlParams.get("direction");
 const thread = urlParams.get("thread");
 
-ctx.lineWidth = 2;
-ctx.beginPath();
-ctx.moveTo(canvas.width / 2, 0);
-ctx.lineTo(canvas.width / 2, canvas.height);
-ctx.strokeStyle = "black";
-ctx.stroke();
+const rThread = threads[thread];
 
-ctx.lineWidth = 10;
-ctx.strokeStyle = ctx.fillStyle = thread;
+if (direction == 0) rThread.reverse();
 
-ctx.beginPath();
-ctx.moveTo(canvas.width - 50, 10);
-ctx.lineTo(canvas.width - 50, canvas.height - 10);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.moveTo(50, 10);
-ctx.lineTo(50, canvas.height - 10);
-ctx.stroke();
-
-ctx.lineWidth=5;
-
-ctx.beginPath();
-ctx.moveTo(canvas.width - 65, canvas.height-10);
-ctx.lineTo(canvas.width - 35, canvas.height-10);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.moveTo(65,10);
-ctx.lineTo(35,10);
-ctx.stroke();
-
-ctx.lineWidth = 1;
-
-ctx.beginPath();
-ctx.moveTo(canvas.width - 50, 0);
-ctx.lineTo(canvas.width - 70, 20);
-ctx.lineTo(canvas.width - 30, 20);
-ctx.closePath();
-ctx.fill();
-
-ctx.beginPath();
-ctx.moveTo(50, canvas.height);
-ctx.lineTo(70, canvas.height - 20);
-ctx.lineTo(30, canvas.height - 20);
-ctx.closePath();
-ctx.fill();
-
-ctx.font = "20px Arial monospace"
-ctx.textBaseline = "middle";
-ctx.fillStyle = "white"
-ctx.textAlign = "right";
-
-let currentThread = threads[thread];
-if (direction == 1) currentThread = currentThread.reverse();
-ctx.lineWidth = 5;
-for (let i = 0; i < currentThread.length; i++) {
-    if (currentThread[i] == station) ctx.fillStyle = ctx.strokeStyle = "cyan";
-    else {
-        ctx.fillStyle = "white";
-        ctx.strokeStyle = thread;
-    }
-    let y = (canvas.height - 20) / currentThread.length * i;
-    ctx.fillText(stations[currentThread[i]], canvas.width - 70, y + 40);
-    ctx.beginPath();
-    ctx.moveTo(canvas.width - 65, y + 40);
-    ctx.lineTo(canvas.width - 35, y + 40);
-    ctx.stroke();
+const curStMap = {
+    red: "blue",
+    blue: "red"
 }
-ctx.textAlign = "left";
-for (let i = 0; i < currentThread.length; i++) {
-    if (currentThread[i] == station) ctx.fillStyle = ctx.strokeStyle = "cyan";
-    else {
-        ctx.fillStyle = "white";
-        ctx.strokeStyle = thread;
-    }
-    let y = (canvas.height - 20) / currentThread.length * i;
-    ctx.fillText(stations[currentThread[i]], 70, y + 40);
+
+const ball = { x: 50, y: 50 };
+
+function render() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.beginPath();
-    ctx.moveTo(65, y + 40);
-    ctx.lineTo(35, y + 40);
+    ctx.arc(ball.x, ball.y, 50, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(0,255,0,0.2)";
+    ctx.fill();
+
+    // -- Static info --
+    // Splitter
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, 10);
+    ctx.lineTo(canvas.width / 2, canvas.height - 10);
+    ctx.strokeStyle = "black";
+    ctx.lineCap = "round";
+    ctx.lineWidth = 5;
     ctx.stroke();
+
+    function threadArrow(x, color, rotated) {
+        let ymin = rotated ? canvas.height - 20 : 20;
+        let ymax = rotated ? 20 : canvas.height - 20;
+
+        let arrowCof = 10;
+
+        ctx.beginPath();
+        ctx.moveTo(x, ymin);
+        ctx.lineTo(x, ymax);
+        ctx.lineCap = "round";
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x - 10, rotated ? ymin - 5 : ymin + 5);
+        ctx.lineTo(x + 10, rotated ? ymin - 5 : ymin + 5);
+        ctx.lineTo(x, rotated ? ymin + arrowCof : ymin - arrowCof);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        ctx.font = "20px Comic Sans MS, Comic Sans, cursive";
+
+        ymax = canvas.height - 30;
+        ymin = 20;
+
+        const step = (ymax - ymin) / rThread.length;
+
+        ctx.textBaseline = "middle";
+        ctx.textAlign = rotated ? "left" : "right";
+
+        for (let y = 0; y < rThread.length; y++) {
+            let yc = y * step +step+30;
+            let yr = rotated ? canvas.height - yc : yc;
+
+            ctx.beginPath();
+            ctx.moveTo(x - 10, yr);
+            ctx.lineTo(x + 10, yr);
+            ctx.stroke();
+
+            if (station == rThread[y]) {
+                ctx.fillStyle = curStMap[thread];
+            } else {
+                ctx.fillStyle = thread;
+            }
+            ctx.fillText(stations[rThread[y]], rotated ? x + 20 : x - 20, yr);
+        }
+    }
+
+    threadArrow(30, thread, true)
+    threadArrow(canvas.width - 30, thread, false);
+
+
 }
+
+const randomFloat = (min, max) => Math.random() * (max - min) + min;
+
+let xCof = randomFloat(0.5,2);
+let yCof = randomFloat(0.5,2);
+
+function app() {
+
+    ball.x += xCof;
+    ball.y += yCof;
+
+    if (ball.x >= canvas.width - 50) {
+        xCof = -randomFloat(0.5, 2);
+    } else if (ball.x <= 50) {
+        xCof = randomFloat(0.5, 2);
+    }
+
+    if (ball.y >= canvas.height - 50) {
+        yCof = -randomFloat(0.5, 2);
+    } else if (ball.y <= 50) {
+        yCof = randomFloat(0.5, 2);
+    }
+
+    render();
+    requestAnimationFrame(app);
+}
+
+app();
