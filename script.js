@@ -26,7 +26,7 @@ const thread = urlParams.get("thread");
 
 const rThread = threads[thread];
 
-if (direction == 0) rThread.reverse();
+if (direction == 1) rThread.reverse();
 
 const curStMap = {
     red: "blue",
