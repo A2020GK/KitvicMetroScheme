@@ -34,7 +34,7 @@ if (isSplitted) {
 
 const rThread = threads[thread];
 
-if (direction == 1) rThread.reverse();
+if (direction == 1&&!isSplitted) rThread.reverse();
 
 const curStMap = {
     red: "blue",
