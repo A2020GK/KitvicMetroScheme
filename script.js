@@ -24,6 +24,13 @@ const threads = {
 const station = urlParams.get("station");
 const direction = urlParams.get("direction");
 const thread = urlParams.get("thread");
+let isSplitted = urlParams.get("split") ?? false;
+
+if (isSplitted == 0) isSplitted = false; else isSplitted = true;
+if (isSplitted) {
+    canvas.width = 224;
+    canvas.height = 352;
+}
 
 const rThread = threads[thread];
 
@@ -34,7 +41,7 @@ const curStMap = {
     blue: "red"
 }
 
-const ball = { x: 50, y: 50, color:0 };
+const ball = { x: 50, y: 50, color: 0 };
 
 function render() {
 
@@ -43,20 +50,22 @@ function render() {
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, 50, 0, Math.PI * 2);
     ctx.fillStyle = `HSLA(${ball.color},100%,50%,0.2)`;
-    ctx.lineWidth=1;
-    ctx.strokeStyle=`rgba(0,0,0,0.2)`;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = `rgba(0,0,0,0.2)`;
     ctx.fill();
     ctx.stroke();
 
     // -- Static info --
     // Splitter
-    ctx.beginPath();
-    ctx.moveTo(canvas.width / 2, 10);
-    ctx.lineTo(canvas.width / 2, canvas.height - 10);
-    ctx.strokeStyle = "black";
-    ctx.lineCap = "round";
-    ctx.lineWidth = 5;
-    ctx.stroke();
+    if (!isSplitted) {
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 10);
+        ctx.lineTo(canvas.width / 2, canvas.height - 10);
+        ctx.strokeStyle = "black";
+        ctx.lineCap = "round";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+    }
 
     function threadArrow(rotated) {
 
@@ -89,8 +98,8 @@ function render() {
         ctx.lineWidth = 5;
         ctx.lineCap = "round";
         ctx.font = "20px Comic Sans MS, Comic Sans, cursive";
-        ctx.textAlign=rotated?"right":"left";
-        ctx.textBaseline="middle";
+        ctx.textAlign = rotated ? "right" : "left";
+        ctx.textBaseline = "middle";
 
         for (let y = 0; y < rThread.length; y++) {
 
@@ -100,19 +109,21 @@ function render() {
             ctx.moveTo(x - 10, ycord);
             ctx.lineTo(x + 10, ycord);
 
-            if(rThread[y] == station) {
-                ctx.fillStyle=curStMap[thread];
+            if (rThread[y] == station) {
+                ctx.fillStyle = curStMap[thread];
             } else {
-                ctx.fillStyle=thread;
+                ctx.fillStyle = thread;
             }
-            ctx.fillText(stations[rThread[y]],rotated?x-20:x+20,ycord);
+            ctx.fillText(stations[rThread[y]], rotated ? x - 20 : x + 20, ycord);
 
             ctx.stroke();
         }
 
     }
-    threadArrow(false);
-    threadArrow(true);
+    if(!isSplitted) {
+        threadArrow(false);
+        threadArrow(true);
+    } else if(direction==0) threadArrow(true); else threadArrow(false);
 
 }
 
@@ -127,7 +138,7 @@ function app() {
     ball.y += yCof;
 
     ball.color++;
-    if(ball.color>=360) ball.color=0;
+    if (ball.color >= 360) ball.color = 0;
 
     if (ball.x >= canvas.width - 50) {
         xCof = -randomFloat(0.5, 2);
